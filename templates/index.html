@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwiftLink | Your Links, Simplified</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #F6EFD2;
+            --bg-card: #ffffff;
+            /* Using white for cards to pop */
+            --bg-accent-section: #E2DDB4;
+            --bg-dark: #000000;
+            --accent-color: #E43636;
+            --accent-hover: #c32a2a;
+            /* A darker red for hover */
+            --text-dark: #000000;
+            --text-light: #F6EFD2;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-dark);
+        }
+
+        .custom-input:focus-visible {
+            box-shadow: 0 0 0 3px rgba(228, 54, 54, 0.4);
+            outline: none;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+
+    <!-- ## Header ## -->
+    <header class="bg-[var(--bg-dark)] shadow-md sticky top-0 z-10">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold text-white">
+                Swift<span style="color: var(--accent-color);">Link</span>
+            </a>
+            <div>
+                <a href="#about"
+                    class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">About</a>
+                <a href="https://github.com/Animesh144" target="_blank" rel="noopener noreferrer"
+                    class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ## Main Content ## -->
+    <main class="flex-grow container mx-auto px-6 py-12 flex flex-col items-center justify-center text-center">
+        <!-- Hero Section -->
+        <div class="max-w-4xl w-full">
+            <h1 class="text-4xl md:text-5xl font-bold text-black tracking-tight mb-4">
+                Your Links, Simplified
+            </h1>
+            <p class="text-lg text-gray-700 mb-10">
+                Create clean, memorable, and trackable links in seconds.
+            </p>
+
+            <!-- Form Container -->
+            <div class="bg-[var(--bg-card)] p-8 rounded-2xl shadow-2xl w-full border border-gray-200">
+                <form id="url-form" class="space-y-4">
+                    <div>
+                        <label for="long-url" class="sr-only">Enter a long URL</label>
+                        <input type="url" id="long-url" name="long-url"
+                            placeholder="https://www.example.com/paste-your-long-url-here" required
+                            class="custom-input block w-full px-5 py-4 bg-gray-50 border border-gray-300 rounded-lg text-lg text-gray-900 focus:border-[var(--accent-color)] focus:ring-0 transition-all duration-300">
+                    </div>
+                    <button type="submit" id="shorten-button"
+                        class="w-full flex justify-center items-center py-4 px-5 border border-transparent rounded-lg shadow-sm text-base font-semibold text-white bg-[var(--accent-color)] hover:bg-[var(--accent-hover)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--accent-color)] transition-all duration-300 transform hover:scale-[1.01]">
+                        Shorten URL
+                    </button>
+                </form>
+
+                <!-- Result Container -->
+                <div id="result-container" class="hidden mt-6">
+                    <div class="bg-green-50 border border-green-200 text-green-800 p-4 rounded-lg text-left"
+                        role="alert">
+                        <p class="font-medium">Success! Here is your short link:</p>
+                        <div class="flex items-center mt-2 relative">
+                            <input type="text" id="shortened-url-input" readonly
+                                class="flex-1 bg-transparent border-0 text-gray-900 font-mono text-sm sm:text-base cursor-pointer focus:ring-0 pr-12">
+                            <button id="copy-button" title="Copy to clipboard"
+                                class="absolute right-1 top-1/2 -translate-y-1/2 p-2 text-gray-500 rounded-lg hover:bg-gray-200 hover:text-gray-900 transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Container -->
+                <div id="error-container" class="hidden mt-6">
+                    <div class="bg-red-50 border-l-4 border-[var(--accent-color)] text-red-800 p-4 rounded-lg text-left"
+                        role="alert">
+                        <p class="font-medium">An Error Occurred</p>
+                        <p id="error-message" class="mt-1 text-sm"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ## About Section ## -->
+    <section id="about" class="bg-[var(--bg-accent-section)] py-16">
+        <div class="container mx-auto px-6 max-w-4xl text-center">
+            <h2 class="text-3xl font-bold mb-4">About SwiftLink</h2>
+            <p class="text-gray-800 mb-8">
+                SwiftLink is a simple and efficient open-source URL shortening service designed to make sharing links
+                easier.
+                This project was created by Animesh to demonstrate modern web development techniques with a clean,
+                user-friendly interface.
+            </p>
+            <a href="https://github.com/Animesh144" target="_blank" rel="noopener noreferrer"
+                class="inline-block bg-[var(--bg-dark)] text-white font-semibold py-3 px-6 rounded-lg hover:bg-gray-800 transition-colors">
+                View on GitHub
+            </a>
+        </div>
+    </section>
+
+    <!-- ## Footer ## -->
+    <footer class="bg-[var(--bg-dark)] text-gray-400">
+        <div class="container mx-auto px-6 py-4 flex flex-col sm:flex-row justify-between items-center text-sm">
+            <p>&copy; 2025 SwiftLink. Created by Animesh.</p>
+            <div class="flex space-x-4 mt-4 sm:mt-0">
+                <a href="https://github.com/Animesh144" target="_blank" rel="noopener noreferrer"
+                    class="hover:text-white transition-colors" aria-label="GitHub">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd"
+                            d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.164 6.839 9.49.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div id="alert-modal"
+        class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-center justify-center z-50 backdrop-blur-sm">
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full space-y-4 text-center">
+            <h3 class="text-lg font-bold">Copied to Clipboard!</h3>
+            <p class="text-gray-600 text-sm">The new link is ready to be pasted.</p>
+            <button id="close-modal-button"
+                class="w-full py-2 px-4 bg-[var(--accent-color)] text-white rounded-lg hover:bg-[var(--accent-hover)] transition-all duration-300">Got
+                it!</button>
+        </div>
+    </div>
+
+    <!-- ## JavaScript (Unchanged) ## -->
+    <script>
+        const form = document.getElementById('url-form');
+        const longUrlInput = document.getElementById('long-url');
+        const shortenButton = document.getElementById('shorten-button');
+        const resultContainer = document.getElementById('result-container');
+        const shortenedUrlInput = document.getElementById('shortened-url-input');
+        const copyButton = document.getElementById('copy-button');
+        const errorContainer = document.getElementById('error-container');
+        const errorMessage = document.getElementById('error-message');
+        const alertModal = document.getElementById('alert-modal');
+        const closeModalButton = document.getElementById('close-modal-button');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const longUrl = longUrlInput.value;
+            const originalButtonText = shortenButton.innerHTML;
+
+            resultContainer.classList.add('hidden');
+            errorContainer.classList.add('hidden');
+            shortenButton.disabled = true;
+            shortenButton.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Shortening...`;
+
+            try {
+                const response = await fetch('/shorten', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: longUrl })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    shortenedUrlInput.value = data.short_url;
+                    resultContainer.classList.remove('hidden');
+                } else {
+                    errorMessage.textContent = data.error || 'An unexpected error occurred.';
+                    errorContainer.classList.remove('hidden');
+                }
+            } catch (error) {
+                errorMessage.textContent = 'Could not connect to the server. Please try again.';
+                errorContainer.classList.remove('hidden');
+            } finally {
+                shortenButton.disabled = false;
+                shortenButton.innerHTML = originalButtonText;
+            }
+        });
+
+        copyButton.addEventListener('click', () => {
+            navigator.clipboard.writeText(shortenedUrlInput.value).then(() => {
+                alertModal.classList.remove('hidden');
+            });
+        });
+
+        closeModalButton.addEventListener('click', () => {
+            alertModal.classList.add('hidden');
+        });
+    </script>
+</body>
+
+</html>
