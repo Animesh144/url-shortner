@@ -7,14 +7,17 @@ from flask_sqlalchemy import SQLAlchemy
 # Create a Flask application instance
 app = Flask(__name__)
 
-# Database configuration: prefer DATABASE_URL (Postgres) otherwise use local sqlite
-DATABASE_URL = os.getenv('DATABASE_URL')
-if DATABASE_URL:
-    app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
-else:
-    # local fallback for development
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///urls.db'
+# --- Correct Database Configuration ---
+# Get the DATABASE_URL from the environment variables Render provides.
+DATABASE_URL = os.environ.get('DATABASE_URL')
 
+# Render's DATABASE_URL starts with 'postgres://', but SQLAlchemy needs 'postgresql://'
+# This code block handles that conversion.
+if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+# If DATABASE_URL is not set (e.g., for local development), fall back to a local SQLite file.
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL or 'sqlite:///urls.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize DB
@@ -87,7 +90,8 @@ def redirect_to_url(short_code):
 
 
 if __name__ == '__main__':
-    # Running the Flask app
-    port = int(os.getenv('PORT', 5000))
-    debug = os.getenv('FLASK_DEBUG', 'True').lower() in ('1', 'true', 'yes')
-    app.run(host='0.0.0.0', port=port, debug=debug)
+    # Running the Flask app (for local testing)
+    # Render will use the Gunicorn start command, not this block.
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)
+

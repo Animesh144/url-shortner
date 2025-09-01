@@ -21,5 +21,6 @@ postgresql://username:password@hostname:5432/dbname
 ```
 
 Deployment notes:
+
 - On platforms like Render or Railway, create a Postgres addon and set the `DATABASE_URL` environment variable in the service settings.
 - Ensure the `requirements.txt` is used during build so `psycopg2-binary` is installed.
